@@ -1,0 +1,33 @@
+td, tr, th {
+	border: 1px solid #000000;
+}
+
+.nota {
+	color: #FFFFFF;
+	text-transform: uppercase;
+}
+
+.aprobado {
+	background-color: green;
+}
+
+.reprobado {
+	background-color: red;	
+}
+
+.izquierda {
+	height: 100vh;
+	width: 50%;
+}
+
+.derecha {
+	height: 100vh;
+	width: 50%;
+}
+#pantalla_dividida{
+	display: flex;
+}
+
+.info-notas, #derecha {
+	display: none;
+}
