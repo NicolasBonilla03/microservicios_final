@@ -37,7 +37,14 @@ class ActividadesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $actividad = new Actividad();
+
+        $actividad->descripcion = $request->descripcion;
+        $actividad->nota = $request->nota;
+        $actividad->codigoEstudiante = $request->codigoEstudiante;
+        $actividad->save();
+
+        return response()->json('Nota registrada exitosamente');
     }
 
     /**

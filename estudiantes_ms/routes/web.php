@@ -13,6 +13,12 @@
 |
 */
 
+$router->get('/', function () use ($router) {
+    return ;
+});
+
 $router->get('index', 'EstudiantesController@index');
 $router->get('actividades/{id}', 'ActividadesController@show');
 $router->get('estudiante/{id}', 'EstudiantesController@getStudent');
+$router->post('create', 'EstudiantesController@store');
+$router->post('create-grade', 'ActividadesController@store');

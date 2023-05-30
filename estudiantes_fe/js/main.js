@@ -67,3 +67,87 @@ function obtenerNotas(codigoEstudiante) {
     }); 
 }
 
+function mostrarFormulario(id){
+    if (!id) {
+        const formulario = $('#formulario'); 
+        let html = '';
+        formulario.html(html);
+        html +='    <h1>Crear Estudiante</h1>';
+        html +='    <label><span>Codigo</span></label>';
+        html +='    <input type="text" name="codigo" id="codigo">';
+        html +='    <hr>';
+        html +='    <label><span>Nombre</span></label>';
+        html +='    <input type="text" name="nombre" id="nombre">';
+        html +='    <hr>';
+        html +='    <label><span>Apellidos</span></label>';
+        html +='    <input type="text" name="apellido" id="apellido">';
+        html +='    <hr>';
+        html +='    <button type="button" onclick="btnCrear();">Crear</button>';
+        formulario.prepend(html);
+    } else  {
+        const formulario = $('#formulario-notas'); 
+        $.ajax({
+            method: 'get',
+            url: 'http://localhost:8000/estudiante/' +id
+        }).done(estudiante => {
+            let html = '';
+            formulario.html(html);
+            html +='    <h1>Crear Nota para estudiante:'+ estudiante.nombres +'</h1>';
+            html +='    <label><span>Descripcion</span></label>';
+            html +='    <input type="text" name="descripcion" id="descripcion">';
+            html +='    <hr>';
+            html +='    <label><span>Nota</span></label>';
+            html +='    <input type="text" name="calificacion" id="calificacion">';
+            html +='    <hr>';
+            html +='    <button type="button" onclick="btnCrearNota('+ id +');">Crear</button>';
+            formulario.prepend(html);
+        }).fail((error)=>{
+            console.error(error);
+        }); 
+    }
+}
+
+function btnCrear() {
+    const code= $('#codigo').val();
+    const names= $('#nombre').val();
+    const secondNames= $('#apellido').val();
+    crearEstudiante(code,names,secondNames);
+}
+
+function crearEstudiante(codigo, nombres, apellidos) {
+    $.ajax({
+        url:'http://localhost:8000/create',
+        method: 'post',
+        data:{
+                codigo: codigo,
+                nombres: nombres,
+                apellidos: apellidos
+        }
+    }).done(response=>{
+        alert(response);
+        location.reload();
+    });
+
+}
+
+function btnCrearNota(codigoEstudiante) {
+    const description= $('#descripcion').val();
+    const note= $('#calificacion').val();
+    crearNota(codigoEstudiante,description,note);
+}
+
+function crearNota(codigoEstudiante, descripcion, nota) {
+    $.ajax({
+        url:'http://localhost:8000/create-grade',
+        method: 'post',
+        data:{
+                codigoEstudiante: codigoEstudiante,
+                descripcion: descripcion,
+                nota: nota
+        }
+    }).done(response=>{
+        alert(response);
+        location.reload();
+    });
+
+}
