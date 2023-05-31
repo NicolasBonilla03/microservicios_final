@@ -39,7 +39,7 @@ function obtenerNotas(codigoEstudiante) {
                 html +='    <td>'+ nota.descripcion+ '</td>';
                 html +='    <td>'+ nota.nota+ '</td>';
                 html +='    <td>';
-                html +='       <button onclick="mostrarFormularioNotas(' + nota.codigoEstudiante + ');">Modificar</button>';
+                html +='       <button onclick="mostrarFormularioNotas(' + nota.codigoEstudiante + ',' + nota.id+ ');">Modificar</button>';
                 html +='       <button onclick="eliminarNota(' + nota.id + ');">Eliminar</button>';
                 html +='   </td>';
                 html +='</tr>';
@@ -134,7 +134,11 @@ function crearEstudiante(codigo, nombres, apellidos) {
 function btnCrearNota(codigoEstudiante) {
     const description= $('#descripcion').val();
     const note= $('#calificacion').val();
-    crearNota(codigoEstudiante,description,note);
+    if (note > 0 && note <= 5) {
+        crearNota(codigoEstudiante,description,note);
+    } else {
+        alert('La nota no es valida');
+    }
 }
 
 function crearNota(codigoEstudiante, descripcion, nota) {
@@ -164,9 +168,83 @@ function eliminarEstudiante(codigo){
 }
 
 function eliminarNota(id){       
-$.ajax({
+    $.ajax({
          url:'http://localhost:8000/delete-grade/'+id,
          method: 'delete',
+    }).done(response=>{
+         alert(response);
+         location.reload();
+    });
+}
+
+function mostrarFormularioNotas(codigoEstudiante, idNota){
+    $.ajax({
+        method: 'get',
+        url: 'http://localhost:8000/estudiante/' + codigoEstudiante 
+    }).done(estudiante => {
+        const table = $('#lista');
+        let html = '';
+        table.html(html);
+            html +='    <h1>Modificar nota</h1>';
+            html +='    <h3>Modificando notas estudiante: '+ estudiante.nombres+ ' ' + estudiante.apellidos + '</h3>';
+            html +='    <h3>Con codigo: '+ estudiante.codigo+ '</td>';
+        table.prepend(html);
+    }).fail((error)=>{
+        console.error(error);
+    }); 
+    mostrarFormularioActividades(idNota);
+}
+
+function mostrarFormularioActividades(id){
+    $('#derecha').css('display', 'block');
+    $.ajax({
+        method: 'get',
+        url: 'http://localhost:8000/actividad/' + id
+    }).done(actividad => {
+        const table_actividades = $('#modificar_nota');
+        let html_actividades = '';
+        table_actividades.html(html_actividades);
+            html_actividades +='<tr>';
+            html_actividades +='    <th>';
+            html_actividades +='        <input type="text" value="' + actividad.descripcion+ '" id="actividad"></input>';
+            html_actividades +='    </th>';
+            html_actividades +='    <th>';
+            html_actividades +='        <input type="number" min="0" max="5" value="' + actividad.nota+ '" id="nota"></input>';
+            html_actividades +='    </th>';
+            html_actividades +='</tr>';
+
+        html_actividades +='<tr>';
+        html_actividades +='    <th>';
+        html_actividades +='        <button type="button" onclick="btnModificar('+ id +');">Guardar</button>';
+        html_actividades +='    </th>';
+        html_actividades +='</tr>';
+        table_actividades.prepend(html_actividades);
+    }).fail((error)=>{
+        console.error(error);
+    }); 
+}
+
+function btnModificar(id) {
+            const activity = $('#actividad').val();
+            const note = $('#nota').val();
+            if ((activity.length > 0) || (note.length > 0) ) {
+                if (note > 0 && note <= 5) {
+                    modificar(id,activity,note);   
+                } else {
+                    alert('La nota no es valida')
+                }
+
+            }
+}
+
+function modificar(id,actividad,nota){
+    $.ajax({
+         url:'http://localhost:8000/actividades/update/'+id,
+         method: 'put',
+         data:{ 
+                descripcion: actividad,
+                nota: nota
+         }
      }).done(response=>{
          alert(response);
          location.reload();

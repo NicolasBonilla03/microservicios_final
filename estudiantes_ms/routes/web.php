@@ -20,7 +20,9 @@ $router->get('/', function () use ($router) {
 $router->get('index', 'EstudiantesController@index');
 $router->get('actividades/{id}', 'ActividadesController@show');
 $router->get('estudiante/{id}', 'EstudiantesController@getStudent');
+$router->get('actividad/{id}', 'ActividadesController@getActivity');
 $router->post('create', 'EstudiantesController@store');
 $router->post('create-grade', 'ActividadesController@store');
 $router->delete('delete/{id}', 'EstudiantesController@destroy');
 $router->delete('delete-grade/{id}', 'ActividadesController@destroy');
+$router->put('actividades/update/{id}', 'ActividadesController@update');

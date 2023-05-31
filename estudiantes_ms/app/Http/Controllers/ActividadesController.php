@@ -80,7 +80,15 @@ class ActividadesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $actividad = Actividad::find($id);
+
+        if (!empty($request->descripcion)) {
+            $actividad->descripcion = $request->descripcion;
+        }
+        $actividad->nota = $request->nota;
+        $actividad->save();
+
+        return response()->json('La modificacion ha sido exitosa');
     }
 
     /**
@@ -97,5 +105,12 @@ class ActividadesController extends Controller
         }
         $actividad->delete();
         return response("Registro eliminado");
+    }
+
+    public function getActivity($id)
+    {
+        $actividad = Actividad::where('id', $id)->firstOrFail();
+
+        return response()->json($actividad);
     }
 }
