@@ -91,6 +91,11 @@ class ActividadesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $actividad = Actividad::find($id);
+        if (empty($actividad)) {
+            return response("La actividad no existe");
+        }
+        $actividad->delete();
+        return response("Registro eliminado");
     }
 }

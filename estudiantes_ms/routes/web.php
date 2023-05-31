@@ -22,3 +22,5 @@ $router->get('actividades/{id}', 'ActividadesController@show');
 $router->get('estudiante/{id}', 'EstudiantesController@getStudent');
 $router->post('create', 'EstudiantesController@store');
 $router->post('create-grade', 'ActividadesController@store');
+$router->delete('delete/{id}', 'EstudiantesController@destroy');
+$router->delete('delete-grade/{id}', 'ActividadesController@destroy');

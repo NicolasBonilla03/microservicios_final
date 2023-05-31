@@ -12,6 +12,7 @@ $(document).ready(function() {
             html +='    <td>'+ estudiante.apellidos+ '</td>';
             html +='    <td>';
             html +='       <button type="button" onclick="obtenerNotas(' + estudiante.codigo + ');">Notas</button>';
+            html +='       <button type="button" onclick="eliminarEstudiante(' + estudiante.codigo + ');">Eliminar</button>';
             html +='   </td>';
             html +='</tr>';
         });
@@ -150,4 +151,24 @@ function crearNota(codigoEstudiante, descripcion, nota) {
         location.reload();
     });
 
+}
+
+function eliminarEstudiante(codigo){       
+    $.ajax({
+        url:'http://localhost:8000/delete/' + codigo,
+        method: 'delete',
+    }).done(response => {
+        alert(response);
+        location.reload();
+    });
+}
+
+function eliminarNota(id){       
+$.ajax({
+         url:'http://localhost:8000/delete-grade/'+id,
+         method: 'delete',
+     }).done(response=>{
+         alert(response);
+         location.reload();
+     });
 }

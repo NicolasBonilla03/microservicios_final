@@ -88,7 +88,12 @@ class EstudiantesController extends Controller
      */
     public function destroy($id)
     {
-
+        $estudiante = Estudiante::where('codigo', $id)->firstOrFail();
+        if (empty($estudiante)) {
+            return response("El estudiante no existe");
+        }
+        $estudiante->delete();
+        return response("Registro eliminado");
     }
 
     public function getStudent($id)
